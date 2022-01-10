@@ -1,0 +1,94 @@
+diff --git a/app/views/layouts/base.html.erb b/app/views/layouts/base.html.erb
+index 45337ce7e..3e9748195 100644
+--- a/app/views/layouts/base.html.erb
++++ b/app/views/layouts/base.html.erb
+@@ -95,8 +95,10 @@
+     <div id="main-menu" class="tabs">
+         <%= render_main_menu(@project) %>
+         <div class="tabs-buttons" style="display:none;">
+-            <button class="tab-left" onclick="moveTabLeft(this); return false;"></button>
+-            <button class="tab-right" onclick="moveTabRight(this); return false;"></button>
++            <button class="tab-left" onclick="moveTabLeft(this); return false;"
++                    title="<%=l(:label_main_menu_left)%>"></button>
++            <button class="tab-right" onclick="moveTabRight(this); return false;"
++                    title="<%=l(:label_main_menu_right)%>"></button>
+         </div>
+     </div>
+     <% end %>
+diff --git a/config/locales/de.yml b/config/locales/de.yml
+index 3975eadfa..bd02a7917 100644
+--- a/config/locales/de.yml
++++ b/config/locales/de.yml
+@@ -1382,3 +1382,7 @@ de:
+   error_invalid_authenticity_token: Ungültiges Authentizitätstoken für Formular.
+   error_query_statement_invalid: Während der Ausführung einer Abfrage ist ein Fehler aufgetreten, dieser wurde
+     protokolliert. Bitte melden Sie diesen Fehler an ihren Redmine-Administrator.
++
++  label_new_object: Neues Objekt anlegen
++  label_main_menu_left: Hauptmenü nach links bewegen
++  label_main_menu_right: Hauptmenü nach rechts bewegen
+diff --git a/config/locales/en.yml b/config/locales/en.yml
+index 9d779a2fe..c6039e9d6 100644
+--- a/config/locales/en.yml
++++ b/config/locales/en.yml
+@@ -1356,3 +1356,7 @@ en:
+ 
+   text_user_destroy_confirmation: "Are you sure you want to delete this user and remove all references to them? This cannot be undone. Often, locking a user instead of deleting them is the better solution. To confirm, please enter their login (%{login}) below."
+   text_project_destroy_enter_identifier: "To confirm, please enter the project's identifier (%{identifier}) below."
++
++  label_new_object: Create new object
++  label_main_menu_left: Move main menu to the left
++  label_main_menu_right: Move main menu to the right
+diff --git a/lib/redmine.rb b/lib/redmine.rb
+index f015f1d79..878286d55 100644
+--- a/lib/redmine.rb
++++ b/lib/redmine.rb
+@@ -325,7 +325,10 @@ Redmine::MenuManager.map :project_menu do |menu|
+     :new_object, nil, :caption => ' + ',
+     :if => Proc.new {|p| Setting.new_item_menu_tab == '2'},
+     :html => {:id => 'new-object',
+-              :onclick => 'toggleNewObjectDropdown(); return false;'}
++              :onclick => 'toggleNewObjectDropdown(); return false;',
++              :alt => :label_new_object,
++              :title => :label_new_object
++    }
+   )
+   menu.push(
+     :new_issue_sub,
+diff --git a/lib/redmine/menu_manager.rb b/lib/redmine/menu_manager.rb
+index 16315a725..01e7f2b99 100644
+--- a/lib/redmine/menu_manager.rb
++++ b/lib/redmine/menu_manager.rb
+@@ -172,7 +172,7 @@ module Redmine
+       end
+ 
+       def render_single_menu_node(item, caption, url, selected)
+-        options = item.html_options(:selected => selected)
++        options = translate_attributes(item.html_options(:selected => selected))
+ 
+         # virtual nodes are only there for their children to be displayed in the menu
+         # and should not do anything on click, except if otherwise defined elsewhere
+@@ -183,6 +183,23 @@ module Redmine
+         link_to(h(caption), url, options)
+       end
+ 
++      def translate_attributes(options)
++        attributes = [:alt, :title]
++
++        attrs_exist = attributes.any? { |attr| !options[attr].nil? }
++        if attrs_exist
++          options = options.clone
++        end
++
++        attributes.each do |attr|
++          unless options[attr].nil?
++            options[attr] = ::I18n.t(options[attr])
++          end
++        end
++
++        options
++      end
++
+       def render_unattached_menu_item(menu_item, project)
+         raise MenuError, ":child_menus must be an array of MenuItems" unless menu_item.is_a? MenuItem
+ 
