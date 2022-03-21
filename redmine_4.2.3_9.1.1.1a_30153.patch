@@ -1,0 +1,66 @@
+diff --git a/public/stylesheets/responsive.css b/public/stylesheets/responsive.css
+index a4902af67..45584199f 100644
+--- a/public/stylesheets/responsive.css
++++ b/public/stylesheets/responsive.css
+@@ -20,6 +20,61 @@
+   display: none;
+ }
+ 
++
++.tabs .tabs-buttons .tab-right {
++  background-image: url(../images/arrow_right.png)
++}
++
++.tabs .tabs-buttons .tab-left {
++  background-image: url(../images/arrow_left.png)
++}
++
++a.icon:focus, a.icon:hover, a.icon-only:focus, a.icon-only:hover {
++  color: #2189de
++}
++
++a.icon, a.icon-only {
++  color: #286ca4
++}
++
++tr.tracker-5 .id > a:hover, tr.tracker-5 .issue_id > a:hover, a.tracker-5:hover, .relations > span > a.tracker-5:hover, .parent > a.tracker-5:hover {
++  background-color: #913f08;
++  color: #fff
++}
++
++tr.tracker-5 .id > a, tr.tracker-5 .issue_id > a, a.tracker-5, .relations > span > a.tracker-5, .parent > a.tracker-5 {
++  background-color: #c6540a;
++  color: #fff
++}
++
++#activity span.description, #search-results span.description {
++  display: block;
++  color: #696969;
++  font-style: italic
++}
++
++.gantt_subjects div, .gantt_selected_column_content div {
++  overflow: hidden;
++  text-overflow: ellipsis;
++  white-space: nowrap;
++  width: 100%;
++  height: 16px;
++  line-height: 16px
++}
++
++.gantt_subjects div.tooltip {
++  display: none;
++  overflow: hidden;
++  position: absolute
++}
++
++.gantt_subjects div:hover .tooltip, .gantt_selected_column_content div:hover .tooltip, .gantt_subjects div.tooltip:hover  {
++  display:block;
++  z-index: 23;
++}
++
++#footer {clear: both; border-top: 1px solid #bbb; font-size: 0.9em; color: #696969;padding: 5px; text-align:center; background:#fff;}
++
+ /*
+   redmine's body is set to min-width: 900px
+   add first breakpoint here and start adding responsiveness

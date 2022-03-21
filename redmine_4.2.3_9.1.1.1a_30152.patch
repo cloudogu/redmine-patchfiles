@@ -1,0 +1,26 @@
+diff --git a/app/views/issues/_list.html.erb b/app/views/issues/_list.html.erb
+index 2dd09d692..2ab2e1455 100644
+--- a/app/views/issues/_list.html.erb
++++ b/app/views/issues/_list.html.erb
+@@ -15,7 +15,7 @@
+       <% query.inline_columns.each do |column| %>
+         <%= column_header(query, column, query_options) %>
+       <% end %>
+-      <th class="buttons"></th>
++      <th class="buttons"><%=l(:button_actions)%></th>
+     </tr>
+   </thead>
+   <tbody>
+diff --git a/app/views/projects/show.html.erb b/app/views/projects/show.html.erb
+index 18b15d840..1d5e33ef7 100644
+--- a/app/views/projects/show.html.erb
++++ b/app/views/projects/show.html.erb
+@@ -58,7 +58,7 @@
+     <table class="list issue-report">
+       <thead>
+         <tr>
+-          <th></th>
++          <th><%=l(:label_tracker)%></th>
+           <th><%=l(:label_open_issues_plural)%></th>
+           <th><%=l(:label_closed_issues_plural)%></th>
+           <th><%=l(:label_total)%></th>
